@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mexico City · Thanksgiving</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Jost:wght@300;400;500;600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: #2c1f14;
+}
+
+.slide {
+  position: absolute; inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.55s ease;
+}
+.slide.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+:root {
+  --fd: 'Cormorant Garamond', Georgia, serif;
+  --fb: 'Jost', sans-serif;
+  --fm: 'Courier Prime', monospace;
+  --sand:    #f2e8d5;
+  --parch:   #ede0c8;
+  --clay:    #c26b3a;
+  --terra:   #a8522b;
+  --sage:    #5a7a5c;
+  --ochre:   #c49a35;
+  --brown:   #3a2a1a;
+  --brlt:    #5c4030;
+  --wmid:    #8c6b50;
+  --linen:   #f8f2e6;
+  --cover:   #2c1f14;
+}
+
+@keyframes fadeUp   { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn   { from{opacity:0} to{opacity:1} }
+@keyframes fadeLeft { from{opacity:0;transform:translateX(-18px)} to{opacity:1;transform:translateX(0)} }
+
+.slide.active .a1{animation:fadeUp .6s .04s both}
+.slide.active .a2{animation:fadeUp .6s .16s both}
+.slide.active .a3{animation:fadeUp .6s .28s both}
+.slide.active .a4{animation:fadeUp .6s .40s both}
+.slide.active .a5{animation:fadeUp .6s .52s both}
+.slide.active .a6{animation:fadeUp .6s .64s both}
+.slide.active .af{animation:fadeIn .7s .08s both}
+
+@media(prefers-reduced-motion:reduce){
+  .slide.active [class*="a"]{animation:none!important;opacity:1}
+}
+
+/* NAV */
+#nav-dots{
+  position:fixed; bottom:clamp(12px,2.5vh,20px);
+  left:50%; transform:translateX(-50%);
+  display:flex; gap:7px; z-index:200;
+}
+.dot{
+  width:7px; height:7px; border-radius:50%;
+  cursor:pointer; transition:all .3s;
+  border:1.5px solid rgba(255,255,255,.4);
+  background:transparent;
+}
+.dot.on{background:white;border-color:white;transform:scale(1.25)}
+.dot.e{border-color:rgba(58,42,26,.3)}
+.dot.e.on{background:var(--brown);border-color:var(--brown)}
+
+#nav-arrows{
+  position:fixed; bottom:clamp(9px,1.8vh,16px);
+  right:clamp(16px,3vw,32px);
+  display:flex; gap:6px; z-index:200;
+}
+.arr{
+  width:34px; height:34px; border-radius:50%;
+  border:none; cursor:pointer; font-size:15px;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .2s;
+  background:rgba(255,255,255,.14); color:white;
+  backdrop-filter:blur(5px);
+}
+.arr.e{background:rgba(58,42,26,.1);color:var(--brown)}
+.arr:hover{opacity:.7}
+
+#ctr{
+  position:fixed; top:clamp(12px,2vh,18px);
+  right:clamp(16px,3vw,32px);
+  font-family:var(--fm); font-size:clamp(9px,1vw,11px);
+  letter-spacing:.12em; z-index:200;
+  color:rgba(255,255,255,.3);
+}
+#ctr.e{color:rgba(58,42,26,.32)}
+
+/* ── SLIDE 1 COVER ── */
+#s1{
+  background:var(--cover);
+  justify-content:flex-end; align-items:flex-start;
+}
+.cover-wash{
+  position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 65% 45% at 78% 18%, rgba(194,107,58,.2) 0%, transparent 58%),
+    radial-gradient(ellipse 55% 55% at 18% 88%, rgba(90,122,92,.09) 0%, transparent 52%),
+    linear-gradient(172deg,#2c1f14 38%,#3d2a18 100%);
+}
+.cover-inner{
+  position:relative; z-index:2;
+  padding:clamp(32px,6vh,72px) clamp(28px,6vw,82px);
+  display:flex; flex-direction:column;
+}
+.cover-rule{
+  width:clamp(36px,5.5vw,68px); height:2px;
+  background:var(--clay); margin-bottom:clamp(12px,2.2vh,22px);
+}
+.cover-eye{
+  font-family:var(--fm); font-size:clamp(9px,1vw,11px);
+  letter-spacing:.28em; text-transform:uppercase;
+  color:var(--ochre); margin-bottom:clamp(10px,1.8vh,18px);
+}
+.cover-title{
+  font-family:var(--fd); font-size:clamp(54px,9.5vw,118px);
+  font-weight:700; color:#f0e6d0; line-height:.91;
+  letter-spacing:-.01em; margin-bottom:clamp(8px,1.2vh,14px);
+}
+.cover-title em{font-style:italic; color:var(--clay)}
+.cover-sub{
+  font-family:var(--fb); font-size:clamp(12px,1.5vw,17px);
+  color:rgba(240,230,208,.5); font-weight:300; letter-spacing:.04em;
+  margin-bottom:clamp(20px,3.5vh,40px);
+}
+.cover-pills{display:flex;gap:clamp(7px,1.1vw,13px);flex-wrap:wrap}
+.cover-pill{
+  font-family:var(--fm); font-size:clamp(8px,.95vw,10.5px);
+  letter-spacing:.1em; color:rgba(240,230,208,.45);
+  border:1px solid rgba(240,230,208,.16); border-radius:3px; padding:5px 12px;
+}
+
+/* ── SLIDE 2 VIDEO ── */
+#s2{background:#1e1510;justify-content:center;align-items:center;gap:clamp(12px,2vh,22px)}
+.vid-eye{
+  font-family:var(--fm); font-size:clamp(9px,1vw,11px);
+  letter-spacing:.3em; color:rgba(240,230,208,.32); text-transform:uppercase;
+}
+.vid-wrap{
+  width:min(88vw,140vh); aspect-ratio:16/9;
+  border-radius:8px; overflow:hidden;
+  box-shadow:0 24px 72px rgba(0,0,0,.65); background:#000;
+}
+.vid-wrap iframe{width:100%;height:100%;border:none}
+
+/* ── SHARED LIGHT SLIDE WRAPPER ── */
+.ls{
+  height:100%; display:flex; flex-direction:column; justify-content:center;
+  padding:clamp(28px,4.5vh,52px) clamp(28px,6vw,80px);
+}
+
+/* ── TYPOGRAPHY SHARED ── */
+.pg-eye{
+  font-family:var(--fm); font-size:clamp(9px,1vw,11px);
+  letter-spacing:.28em; text-transform:uppercase;
+  color:var(--clay); margin-bottom:clamp(5px,.9vh,9px);
+}
+.pg-title{
+  font-family:var(--fd); font-size:clamp(26px,4.2vw,52px);
+  font-weight:700; color:var(--brown); line-height:1.05;
+  margin-bottom:clamp(16px,2.6vh,30px);
+}
+.pg-title em{font-style:italic;color:var(--clay)}
+
+/* ── SLIDE 3 PLAN ── */
+#s3{background:var(--linen)}
+.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(11px,1.8vw,20px)}
+.pc{
+  background:white; border-radius:8px;
+  border:1px solid rgba(58,42,26,.1);
+  padding:clamp(13px,1.9vh,21px) clamp(13px,1.8vw,19px);
+}
+.pc-icon{font-size:clamp(18px,2.4vw,26px);display:block;margin-bottom:7px}
+.pc-label{
+  font-family:var(--fm); font-size:clamp(8px,.88vw,10px);
+  letter-spacing:.2em; text-transform:uppercase;
+  color:var(--clay); margin-bottom:5px;
+}
+.pc-body{
+  font-family:var(--fb); font-size:clamp(11.5px,1.2vw,14px);
+  color:var(--brlt); line-height:1.55;
+}
+.pc-body strong{color:var(--brown);font-weight:600}
+
+/* ── SLIDE 4 MENU ── */
+#s4{background:var(--parch)}
+.act-grid{
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:clamp(9px,1.4vw,17px); margin-top:clamp(13px,2vh,24px);
+}
+.ac{
+  background:var(--linen); border-radius:8px;
+  border-top:3px solid var(--ac,var(--wmid));
+  padding:clamp(11px,1.7vh,17px) clamp(11px,1.3vw,15px);
+}
+.ac-icon{font-size:clamp(17px,2.1vw,23px);display:block;margin-bottom:6px}
+.ac-name{
+  font-family:var(--fd); font-size:clamp(13px,1.45vw,17px);
+  font-weight:600; color:var(--brown); margin-bottom:4px; line-height:1.2;
+}
+.ac-desc{
+  font-family:var(--fb); font-size:clamp(10.5px,1.05vw,12px);
+  color:var(--wmid); line-height:1.45;
+}
+.ac-tag{
+  margin-top:6px; font-family:var(--fm);
+  font-size:clamp(7.5px,.8vw,9px); color:var(--ac,var(--wmid));
+  letter-spacing:.06em; display:block;
+}
+
+/* ── ITINERARY SLIDES ── */
+.itin{
+  height:100%; display:flex; flex-direction:column; justify-content:center;
+  padding:clamp(24px,3.8vh,46px) clamp(28px,6vw,80px);
+}
+
+.opt-row{
+  display:flex; align-items:flex-start;
+  gap:clamp(13px,2.2vw,26px); margin-bottom:clamp(13px,2vh,24px);
+}
+.opt-badge{
+  width:clamp(42px,5.8vw,58px); height:clamp(42px,5.8vw,58px);
+  border-radius:50%; border:2px solid var(--oc,var(--clay));
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  font-family:var(--fd); font-size:clamp(17px,2.4vw,27px);
+  font-style:italic; font-weight:700; color:var(--oc,var(--clay));
+}
+.opt-code{
+  font-family:var(--fm); font-size:clamp(8px,.88vw,10px);
+  letter-spacing:.25em; text-transform:uppercase;
+  color:var(--oc,var(--clay)); margin-bottom:3px;
+}
+.opt-hl{
+  font-family:var(--fd); font-size:clamp(20px,3.2vw,40px);
+  font-weight:700; line-height:1.05; color:var(--htxt,var(--brown));
+}
+.opt-hl em{font-style:italic;color:var(--oc,var(--clay))}
+.opt-blurb{
+  font-family:var(--fb); font-size:clamp(10.5px,1.1vw,13px);
+  line-height:1.5; margin-top:4px; color:var(--bmuted,var(--wmid));
+}
+
+/* day rows */
+.days{display:flex;flex-direction:column;gap:clamp(9px,1.3vh,15px)}
+.day{
+  display:grid; grid-template-columns:clamp(50px,6.8vw,70px) 1fr;
+  gap:clamp(11px,1.7vw,21px); align-items:start;
+}
+.day-name{
+  font-family:var(--fm); font-size:clamp(9px,.97vw,11px);
+  font-weight:700; letter-spacing:.08em; text-align:right; padding-top:4px;
+  color:var(--dn,var(--wmid));
+}
+.day-name.hi{color:var(--oc,var(--clay))}
+.day-body{
+  padding-left:clamp(11px,1.4vw,17px);
+  border-left:2px solid var(--dl,rgba(194,107,58,.22));
+  position:relative;
+}
+.day-body::before{
+  content:''; position:absolute; left:-5px; top:7px;
+  width:8px; height:8px; border-radius:50%;
+  background:var(--oc,var(--clay));
+}
+.day-body.dim{border-left-color:rgba(0,0,0,.1)}
+.day-body.dim::before{background:#c0b4a4}
+.day-act{
+  font-family:var(--fb); font-size:clamp(12px,1.28vw,15px);
+  font-weight:500; line-height:1.35; color:var(--atxt,var(--brown));
+}
+.day-note{
+  font-family:var(--fb); font-size:clamp(10px,1.05vw,12px);
+  line-height:1.45; margin-top:3px; color:var(--bmuted,var(--wmid));
+}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.tag{
+  font-family:var(--fm); font-size:clamp(7px,.78vw,8.5px);
+  letter-spacing:.07em; padding:2px 8px; border-radius:3px;
+  border:1px solid var(--tc,rgba(194,107,58,.35));
+  color:var(--tcol,var(--clay));
+  background:var(--tbg,rgba(194,107,58,.06));
+}
+.tag.soft{
+  color:var(--sc,var(--wmid));
+  border-color:var(--sbc,rgba(140,107,80,.28));
+  background:var(--sbg,rgba(140,107,80,.05));
+}
+
+/* ── SLIDE 8 NOTES ── */
+#s8{background:var(--parch)}
+.notes-grid{
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:clamp(11px,1.8vw,20px); margin-top:clamp(13px,2vh,24px);
+}
+.nc{
+  background:var(--linen); border-radius:8px;
+  border:1px solid rgba(58,42,26,.1);
+  padding:clamp(12px,1.8vh,19px) clamp(13px,1.7vw,19px);
+}
+.nc-title{
+  font-family:var(--fm); font-size:clamp(8px,.88vw,10px);
+  letter-spacing:.2em; text-transform:uppercase;
+  color:var(--clay); margin-bottom:9px;
+}
+.ni{
+  font-family:var(--fb); font-size:clamp(10.5px,1.12vw,13px);
+  color:var(--wmid); padding-left:13px; position:relative;
+  line-height:1.5; margin-bottom:5px;
+}
+.ni::before{content:'›';position:absolute;left:0;color:var(--clay);font-weight:700}
+.ni strong{color:var(--brown);font-weight:600}
+
+/* ── SLIDE 10 CDMX GREATEST HITS ── */
+#s9-hits{background:var(--linen)}
+.hits-grid{
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:clamp(9px,1.4vw,16px); margin-top:clamp(13px,2vh,22px);
+}
+.hit{
+  background:white; border-radius:8px;
+  border:1px solid rgba(58,42,26,.1);
+  padding:clamp(11px,1.7vh,17px) clamp(11px,1.4vw,15px);
+}
+.hit-icon{font-size:clamp(17px,2vw,22px);display:block;margin-bottom:5px}
+.hit-name{
+  font-family:var(--fd); font-size:clamp(13px,1.4vw,16px);
+  font-weight:600; color:var(--brown); margin-bottom:3px; line-height:1.2;
+}
+.hit-desc{
+  font-family:var(--fb); font-size:clamp(10px,1vw,11.5px);
+  color:var(--wmid); line-height:1.45;
+}
+.hit-note{
+  margin-top:5px; font-family:var(--fm);
+  font-size:clamp(7px,.76vw,8.5px); color:var(--clay);
+  letter-spacing:.06em; display:block;
+}
+
+/* ── SLIDE 11 CLOSE ── */
+#s10-close{background:var(--cover);justify-content:center;align-items:center}
+#s10{background:var(--linen)}
+/* fix: actual closing slide */
+.slide-close{background:var(--cover) !important;justify-content:center;align-items:center}
+.close-wash{
+  position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 48% 48% at 50% 50%, rgba(194,107,58,.14) 0%, transparent 62%),
+    linear-gradient(155deg,#2c1f14,#3d2a18);
+}
+.close-inner{
+  position:relative; z-index:2; text-align:center;
+  padding:clamp(20px,5vw,64px);
+}
+.close-rule{width:clamp(30px,5vw,56px);height:2px;background:var(--clay);margin:0 auto clamp(13px,2.3vh,21px)}
+.close-eye{
+  font-family:var(--fm); font-size:clamp(9px,1vw,11px);
+  letter-spacing:.3em; text-transform:uppercase;
+  color:var(--ochre); margin-bottom:clamp(10px,1.8vh,17px);
+}
+.close-title{
+  font-family:var(--fd); font-size:clamp(34px,6vw,80px);
+  font-weight:700; color:#f0e6d0; line-height:1.0;
+  margin-bottom:clamp(11px,1.9vh,19px);
+}
+.close-title em{font-style:italic;color:var(--clay)}
+.close-sub{
+  font-family:var(--fb); font-size:clamp(12px,1.4vw,16px);
+  color:rgba(240,230,208,.45); font-weight:300;
+  max-width:430px; margin:0 auto clamp(18px,3.2vh,34px); line-height:1.65;
+}
+.vote-row{display:flex;justify-content:center;gap:clamp(8px,1.4vw,15px);flex-wrap:wrap}
+.vc{
+  font-family:var(--fm); font-size:clamp(9px,1vw,11px); letter-spacing:.1em;
+  color:rgba(240,230,208,.55); border:1px solid rgba(240,230,208,.2);
+  border-radius:3px; padding:8px 17px;
+}
+
+</style>
+</head>
+<body>
+
+<!-- S1 COVER -->
+<div class="slide active" id="s1">
+  <div class="cover-wash"></div>
+  <div class="cover-inner" style="height:100%;justify-content:flex-end;">
+    <div class="cover-rule a1"></div>
+    <div class="cover-eye a1">A family trip · Thanksgiving week</div>
+    <h1 class="cover-title a2">Mexico<br><em>City.</em></h1>
+    <p class="cover-sub a3">Saturday through Tuesday · Condesa · Three ideas for four days</p>
+    <div class="cover-pills a4">
+      <span class="cover-pill">Rolling arrivals Sat</span>
+      <span class="cover-pill">3 itinerary options</span>
+      <span class="cover-pill">Taco tour Tuesday — always 🌮</span>
+    </div>
+  </div>
+</div>
+
+<!-- S2 XOCHIMILCO VIDEO -->
+<div class="slide" id="s2">
+  <div style="background:#1a1e14;width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:clamp(12px,2vh,22px);padding:clamp(20px,4vh,48px)">
+    <p class="vid-eye af" style="color:rgba(210,230,200,.35)">What Xochimilco actually looks like</p>
+    <div class="vid-wrap a1">
+      <iframe src="https://www.youtube.com/embed/buQXrJCUFVA?rel=0&modestbranding=1"
+        title="Xochimilco Canals" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <p class="a2" style="font-family:var(--fm);font-size:clamp(9px,1vw,10px);color:rgba(210,230,200,.2);letter-spacing:.12em;">The floating party in Mexico City</p>
+  </div>
+</div>
+
+<!-- S3 THE PLAN -->
+<div class="slide" id="s3">
+  <div class="ls" style="background:var(--linen)">
+    <div class="pg-eye a1">The setup</div>
+    <h2 class="pg-title a2">Here's what we know.</h2>
+    <div class="plan-grid">
+      <div class="pc a3">
+        <span class="pc-icon">🏡</span>
+        <div class="pc-label">Home Base</div>
+        <div class="pc-body"><strong>Condesa, CDMX.</strong> Art Deco streets, Parque México around the corner, excellent restaurants and cocktail bars on every block — all walkable from the Airbnb.</div>
+      </div>
+      <div class="pc a3" style="animation-delay:.11s">
+        <span class="pc-icon">📅</span>
+        <div class="pc-label">Our Four Days</div>
+        <div class="pc-body"><strong>Saturday</strong> — rolling arrivals, easy night out<br><strong>Sunday &amp; Monday</strong> — two adventure days<br><strong>Tuesday</strong> — culture + the taco tour sendoff</div>
+      </div>
+      <div class="pc a4">
+        <span class="pc-icon">🌮</span>
+        <div class="pc-label">Tuesday Night — Non-Negotiable</div>
+        <div class="pc-body">Every option ends the same way: a <strong>self-guided taco tour</strong> through the streets. No app, no bus. Just us wandering Mexico City.</div>
+      </div>
+      <div class="pc a4" style="animation-delay:.11s">
+        <span class="pc-icon">⚠️</span>
+        <div class="pc-label">One Thing to Know</div>
+        <div class="pc-body"><strong>Both the Anthropology Museum and Chapultepec Castle close on Mondays.</strong> All three options work around this — museum days only land on Sunday or Tuesday.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S4 ACTIVITY MENU -->
+<div class="slide" id="s4">
+  <div class="ls" style="background:var(--parch)">
+    <div class="pg-eye a1">What we're choosing from</div>
+    <h2 class="pg-title a2" style="margin-bottom:0">The menu.</h2>
+    <div class="act-grid">
+      <div class="ac a3" style="--ac:var(--clay)">
+        <span class="ac-icon">🎈</span>
+        <div class="ac-name">Hot Air Balloon + Pyramids</div>
+        <div class="ac-desc">Sunrise over Teotihuacán — champagne toast, buffet breakfast, 2hrs at the pyramids. One of the most memorable things you can do in all of Mexico.</div>
+        <span class="ac-tag">5am pickup · half day · ~$150–200/pp</span>
+      </div>
+      <div class="ac a3" style="--ac:var(--sage);animation-delay:.1s">
+        <span class="ac-icon">🏛️</span>
+        <div class="ac-name">Anthropology Museum</div>
+        <div class="ac-desc">The world's finest pre-Columbian collection. The Aztec Sun Stone. The Maya room. World-class and a short hop through Chapultepec Park from Condesa.</div>
+        <span class="ac-tag">Tue–Sun · 3–4 hrs · ~$5/pp</span>
+      </div>
+      <div class="ac a3" style="--ac:var(--ochre);animation-delay:.2s">
+        <span class="ac-icon">🏰</span>
+        <div class="ac-name">Chapultepec Castle</div>
+        <div class="ac-desc">The only royal castle in North America. Steep walk up, panoramic city views at the top, gorgeous rooms inside. Worth every step.</div>
+        <span class="ac-tag">Tue–Sun · 2–3 hrs · ~$5/pp</span>
+      </div>
+      <div class="ac a4" style="--ac:var(--wmid)">
+        <span class="ac-icon">🚌</span>
+        <div class="ac-name">Turibus Hop-On Hop-Off</div>
+        <div class="ac-desc">Four routes, one-day pass, audio guides in 9 languages. Relax on the open top deck and hop off wherever looks good. Great way to get oriented.</div>
+        <span class="ac-tag">Daily 9am–7pm · all day · ~$20/pp</span>
+      </div>
+      <div class="ac a4" style="--ac:var(--terra);animation-delay:.1s">
+        <span class="ac-icon">🛶</span>
+        <div class="ac-name">Xochimilco Canals</div>
+        <div class="ac-desc">Colorful boats on ancient Aztec waterways — floating mariachis, vendors rowing up with food and drinks, pure festive joy. Pairs perfectly with Coyoacán after.</div>
+        <span class="ac-tag">Daily 8am–5pm · half–full day</span>
+      </div>
+      <div class="ac a4" style="--ac:var(--brlt);animation-delay:.2s">
+        <span class="ac-icon">🍽️</span>
+        <div class="ac-name">High-End Group Dinner</div>
+        <div class="ac-desc">One real splurge — private dining room for the group, top-tier contemporary Mexican cuisine. Sunday or Monday depending on the itinerary.</div>
+        <span class="ac-tag">One evening · ~$150–200/pp</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S5 OPTION A — terracotta warm -->
+<div class="slide" id="s5">
+  <div class="itin" style="background:#f5ede0;--oc:var(--clay);--dn:var(--wmid);--dl:rgba(194,107,58,.22);--atxt:var(--brown);--bmuted:var(--wmid);--htxt:var(--brown);--tc:rgba(194,107,58,.35);--tcol:var(--clay);--tbg:rgba(194,107,58,.06);--sc:var(--wmid);--sbc:rgba(140,107,80,.28);--sbg:rgba(140,107,80,.05)">
+
+    <div class="opt-row">
+      <div class="opt-badge a1">A</div>
+      <div>
+        <div class="opt-code a1">Option A · Dawn Expedition</div>
+        <h2 class="opt-hl a2">Rise early, <em>earn the view.</em></h2>
+        <p class="opt-blurb a2">Lead with the balloon on Day 2 while everyone's still fired up. The rest of the trip unwinds gently from there.</p>
+      </div>
+    </div>
+
+    <div class="days">
+      <div class="day a3">
+        <div class="day-name">SAT</div>
+        <div class="day-body dim">
+          <div class="day-act">Arrivals — Condesa cocktail crawl 🍹</div>
+          <div class="day-note">No reservations needed. Walk out the door. Baltra Bar, the rooftop at Condesa DF, Limantour nearby in Roma Norte.</div>
+          <div class="tags"><span class="tag soft">No reservations</span><span class="tag soft">Walkable</span></div>
+        </div>
+      </div>
+      <div class="day a4">
+        <div class="day-name hi">SUN</div>
+        <div class="day-body">
+          <div class="day-act">🎈 Hot Air Balloon + Teotihuacán Pyramids</div>
+          <div class="day-note">5am pickup. Sunrise flight, champagne toast, buffet breakfast, 2hrs at the pyramids. Back by early afternoon — rest up after.</div>
+          <div class="tags"><span class="tag">5am pickup</span><span class="tag">~$150–200/pp</span><span class="tag soft">Recovery afternoon</span></div>
+        </div>
+      </div>
+      <div class="day a4" style="animation-delay:.1s">
+        <div class="day-name hi">MON</div>
+        <div class="day-body">
+          <div class="day-act">🚌 Turibus all day + 🍽️ High-End Dinner</div>
+          <div class="day-note">Loose city day — hop off wherever looks interesting. Centro Histórico, Polanco, the markets. Big group dinner in the evening with a private room.</div>
+          <div class="tags"><span class="tag">Flexible pace</span><span class="tag">Dinner reservation needed</span></div>
+        </div>
+      </div>
+      <div class="day a5">
+        <div class="day-name hi">TUE</div>
+        <div class="day-body">
+          <div class="day-act">🏛️ Anthropology Museum + Chapultepec Castle → 🌮 Taco Tour</div>
+          <div class="day-note">Both open Tuesday! Museum in the morning (plan 3–4 hrs), castle for the afternoon views, then self-guided tacos all evening.</div>
+          <div class="tags"><span class="tag">Museums open Tue</span><span class="tag">Self-guided tacos</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S6 OPTION B — sage green -->
+<div class="slide" id="s6">
+  <div class="itin" style="background:#eef2ec;--oc:var(--sage);--dn:#5a6e5a;--dl:rgba(90,122,92,.22);--atxt:#1e2e1e;--bmuted:#5a6e5a;--htxt:#1e2e1e;--tc:rgba(90,122,92,.35);--tcol:var(--sage);--tbg:rgba(90,122,92,.06);--sc:#7a8c7e;--sbc:rgba(122,140,126,.28);--sbg:rgba(122,140,126,.05)">
+
+    <div class="opt-row">
+      <div class="opt-badge a1">B</div>
+      <div>
+        <div class="opt-code a1">Option B · Verdant Morning</div>
+        <h2 class="opt-hl a2">Settle in, <em>then soar.</em></h2>
+        <p class="opt-blurb a2">Start with culture and city-getting. Build momentum through Xochimilco, then close the trip with the balloon as a triumphant finale.</p>
+      </div>
+    </div>
+
+    <div class="days">
+      <div class="day a3">
+        <div class="day-name">SAT</div>
+        <div class="day-body dim">
+          <div class="day-act">Arrivals — Condesa cocktail crawl 🍹</div>
+          <div class="day-note">No reservations. Walk the Art Deco streets, find a terrace, let the neighborhood welcome everyone in.</div>
+          <div class="tags"><span class="tag soft">No reservations</span><span class="tag soft">Walkable</span></div>
+        </div>
+      </div>
+      <div class="day a4">
+        <div class="day-name hi">SUN</div>
+        <div class="day-body">
+          <div class="day-act">🚌 Turibus + 🏛️ Anthropology Museum + Chapultepec Castle + 🍽️ Dinner</div>
+          <div class="day-note">Use the Turibus to orient, hop off at Chapultepec for both museums (open Sunday!). Wind down with the splurge dinner in the evening.</div>
+          <div class="tags"><span class="tag">Museums open Sun</span><span class="tag">Dinner</span></div>
+        </div>
+      </div>
+      <div class="day a4" style="animation-delay:.1s">
+        <div class="day-name hi">MON</div>
+        <div class="day-body">
+          <div class="day-act">🛶 Xochimilco Canals + Coyoacán wander</div>
+          <div class="day-note">Full southern neighborhood day — trajinera boats, floating mariachis, mezcal, street snacks. Stroll Coyoacán's cobblestones after. One of a kind.</div>
+          <div class="tags"><span class="tag">Half–full day</span><span class="tag soft">No museums Mon</span></div>
+        </div>
+      </div>
+      <div class="day a5">
+        <div class="day-name hi">TUE</div>
+        <div class="day-body">
+          <div class="day-act">🎈 Hot Air Balloon + Teotihuacán → 🌮 Taco Tour</div>
+          <div class="day-note">5am balloon, back by 1–2pm. Rest up, then close the whole trip with the taco tour as a grand finale. Yes, it's a big day. Worth it.</div>
+          <div class="tags"><span class="tag">5am pickup</span><span class="tag">~$150–200/pp</span><span class="tag soft">Epic finale</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S7 OPTION C — ochre/warm -->
+<div class="slide" id="s7">
+  <div style="background:var(--linen);height:100%;display:flex;flex-direction:column;position:relative">
+    <div style="position:absolute;left:0;top:0;bottom:0;width:clamp(5px,.7vw,8px);background:var(--ochre)"></div>
+    <div class="itin" style="padding-left:clamp(36px,7.5vw,96px);--oc:var(--ochre);--dn:var(--wmid);--dl:rgba(196,154,53,.22);--atxt:var(--brown);--bmuted:var(--wmid);--htxt:var(--brown);--tc:rgba(196,154,53,.35);--tcol:var(--ochre);--tbg:rgba(196,154,53,.07);--sc:var(--wmid);--sbc:rgba(140,107,80,.28);--sbg:rgba(140,107,80,.05)">
+
+      <div class="opt-row">
+        <div class="opt-badge a1">C</div>
+        <div>
+          <div class="opt-code a1">Option C · Split the Big Days</div>
+          <h2 class="opt-hl a2">Breathe between <em>the adventures.</em></h2>
+          <p class="opt-blurb a2">Separate the two big excursions so everyone gets proper recovery time. The most relaxed rhythm — still fully packed, just better paced.</p>
+        </div>
+      </div>
+
+      <div class="days">
+        <div class="day a3">
+          <div class="day-name">SAT</div>
+          <div class="day-body dim">
+            <div class="day-act">Arrivals — Condesa cocktail crawl 🍹</div>
+            <div class="day-note">No reservations. Wander, drink, eat, get comfortable. The neighborhood makes it easy.</div>
+            <div class="tags"><span class="tag soft">No reservations</span><span class="tag soft">Walkable</span></div>
+          </div>
+        </div>
+        <div class="day a4">
+          <div class="day-name hi">SUN</div>
+          <div class="day-body">
+            <div class="day-act">🎈 Hot Air Balloon + Teotihuacán Pyramids</div>
+            <div class="day-note">5am pickup. Sunrise flight, champagne toast, breakfast buffet, pyramids. Back early afternoon — full recovery window before anything else.</div>
+            <div class="tags"><span class="tag">5am pickup</span><span class="tag">~$150–200/pp</span><span class="tag soft">Recovery afternoon</span></div>
+          </div>
+        </div>
+        <div class="day a4" style="animation-delay:.1s">
+          <div class="day-name hi">MON</div>
+          <div class="day-body">
+            <div class="day-act">🛶 Xochimilco + Coyoacán + 🍽️ High-End Dinner</div>
+            <div class="day-note">Canal day in the south — boats, mariachis, floating snack vendors. Walk Coyoacán's plazas after, then cap it all with the big group dinner.</div>
+            <div class="tags"><span class="tag">Full day</span><span class="tag">Dinner</span><span class="tag soft">No museums Mon</span></div>
+          </div>
+        </div>
+        <div class="day a5">
+          <div class="day-name hi">TUE</div>
+          <div class="day-body">
+            <div class="day-act">🏛️ Anthropology Museum + Chapultepec Castle → 🌮 Taco Tour</div>
+            <div class="day-note">Museum morning, castle afternoon, taco tour sendoff. The most leisurely Tuesday of the three. A genuinely perfect last day.</div>
+            <div class="tags"><span class="tag">Museums open Tue</span><span class="tag">Self-guided tacos</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S8 GOOD TO KNOW -->
+<div class="slide" id="s8">
+  <div class="ls" style="background:var(--parch)">
+    <div class="pg-eye a1">Before you vote</div>
+    <h2 class="pg-title a2" style="margin-bottom:0">Good to know.</h2>
+    <div class="notes-grid">
+      <div class="nc a3">
+        <div class="nc-title">🎈 Hot Air Balloon</div>
+        <div class="ni"><strong>5am pickup</strong> from near the Airbnb — plan the night before accordingly</div>
+        <div class="ni">Top-rated operator: <strong>Volare</strong> — FAA &amp; AFAC certified, thousands of 5-star reviews</div>
+        <div class="ni">Includes <strong>champagne toast, buffet breakfast</strong> + optional 2hrs at the pyramids</div>
+        <div class="ni">Expect a slow, happy, tired afternoon after</div>
+      </div>
+      <div class="nc a3" style="animation-delay:.1s">
+        <div class="nc-title">🏛️ Museums</div>
+        <div class="ni"><strong>Both closed Mondays</strong> — all three options plan around this</div>
+        <div class="ni">Anthropology Museum: open <strong>Tue–Sun, 9am–5pm</strong> — budget at least 3 hrs</div>
+        <div class="ni">Chapultepec Castle: open <strong>Tue–Sun, 9am–5pm</strong> — steep uphill walk, wear good shoes</div>
+        <div class="ni">Both are in <strong>Chapultepec Park</strong> — doable in one comfortable day</div>
+      </div>
+      <div class="nc a4">
+        <div class="nc-title">🛶 Xochimilco</div>
+        <div class="ni">Ancient Aztec canal system, <strong>UNESCO World Heritage site</strong></div>
+        <div class="ni">Boats priced <strong>per trajinera, not per person</strong> — ideal for a group our size</div>
+        <div class="ni">Bring <strong>cash</strong> — floating vendors and mariachis are cash only</div>
+        <div class="ni">Pairs beautifully with a walk through <strong>Coyoacán</strong> neighborhood after</div>
+      </div>
+      <div class="nc a4" style="animation-delay:.1s">
+        <div class="nc-title">🍽️ Dinner + 🌮 Taco Tour</div>
+        <div class="ni">Big dinner will likely need a <strong>private dining room</strong> — restaurant TBD once we confirm headcount</div>
+        <div class="ni">Budget: <strong>~$150–200/pp</strong>, possibly a bit less depending on where we land</div>
+        <div class="ni">Tuesday taco tour is <strong>fully self-guided</strong> — no app, no bus, just the streets</div>
+        <div class="ni">Condesa &amp; Roma Norte are <strong>safe and lively</strong> for walking at night</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S9 CDMX GREATEST HITS (not in the plan, but worth knowing) -->
+<div class="slide" id="s9">
+  <div class="ls" style="background:var(--linen)">
+    <div class="pg-eye a1">While you're there</div>
+    <h2 class="pg-title a2" style="margin-bottom:0">CDMX greatest hits<br><span style="font-style:italic;color:var(--wmid);font-size:clamp(14px,1.8vw,22px);font-weight:400">not in the plan, but worth knowing about.</span></h2>
+    <div class="hits-grid">
+      <div class="hit a3">
+        <span class="hit-icon">🎨</span>
+        <div class="hit-name">Frida Kahlo Museum</div>
+        <div class="hit-desc">La Casa Azul in Coyoacán — her actual home, full of her work and personal effects. One of the most visited museums in the country. Book ahead.</div>
+        <span class="hit-note">Book tickets in advance · Coyoacán</span>
+      </div>
+      <div class="hit a3" style="animation-delay:.09s">
+        <span class="hit-icon">🏙️</span>
+        <div class="hit-name">Zócalo &amp; Centro Histórico</div>
+        <div class="hit-desc">The vast main plaza, Palacio de Bellas Artes, the Metropolitan Cathedral, the Templo Mayor ruins. The historic heart of the city and honestly overwhelming in the best way.</div>
+        <span class="hit-note">Free to walk · Full half-day</span>
+      </div>
+      <div class="hit a3" style="animation-delay:.18s">
+        <span class="hit-icon">🛍️</span>
+        <div class="hit-name">Polanco</div>
+        <div class="hit-desc">Mexico City's most upscale neighborhood — high-end restaurants, galleries, the Soumaya Museum (free, wild architecture), and great people-watching.</div>
+        <span class="hit-note">Turibus stops here · Walkable area</span>
+      </div>
+      <div class="hit a4">
+        <span class="hit-icon">🌮</span>
+        <div class="hit-name">Mercado de San Juan</div>
+        <div class="hit-desc">A beloved indoor market in Centro with gourmet vendors, imported goods, and some of the best tortas and quesadillas in the city. Low-key and real.</div>
+        <span class="hit-note">Open daily · Centro Histórico</span>
+      </div>
+      <div class="hit a4" style="animation-delay:.09s">
+        <span class="hit-icon">🍺</span>
+        <div class="hit-name">Roma Norte</div>
+        <div class="hit-desc">Our next-door neighborhood — walkable from Condesa. Licorería Limantour (one of the best bars in Latin America), excellent restaurants, and a great evening vibe.</div>
+        <span class="hit-note">Walk from Condesa · No reservations at bars</span>
+      </div>
+      <div class="hit a4" style="animation-delay:.18s">
+        <span class="hit-icon">🌇</span>
+        <div class="hit-name">Mirador Torre Latinoamericana</div>
+        <div class="hit-desc">The observation deck at the top of one of the city's most iconic skyscrapers. Sweeping 360° views of the entire valley. Best at dusk when the lights come on.</div>
+        <span class="hit-note">Centro · Evening recommended</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S10 CLOSING -->
+<div class="slide slide-close" id="s10">
+  <div class="close-wash"></div>
+  <div class="close-inner">
+    <div class="close-rule a1"></div>
+    <div class="close-eye a1">So — which one?</div>
+    <h2 class="close-title a2">Let's <em>vote</em><br>and book this thing.</h2>
+    <p class="close-sub a3">All three options have the same bones — an easy Saturday, one splurge dinner, and the Tuesday taco tour. The question is just how you want to fill the middle.</p>
+    <div class="vote-row a4">
+      <div class="vc">A · Dawn Expedition 🌄</div>
+      <div class="vc">B · Verdant Morning 🌿</div>
+      <div class="vc">C · Split the Days 🍂</div>
+    </div>
+    <p class="a5" style="font-family:var(--fm);font-size:clamp(9px,1vw,10px);color:rgba(240,230,208,.25);margin-top:clamp(16px,2.5vh,24px);letter-spacing:.15em;">Feliz Thanksgiving, family.</p>
+  </div>
+</div>
+
+<!-- NAV -->
+<div id="nav-dots"></div>
+<div id="nav-arrows">
+  <button class="arr" id="prev" onclick="go(cur-1)">←</button>
+  <button class="arr" id="next" onclick="go(cur+1)">→</button>
+</div>
+<div id="ctr">1 / 9</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const N = slides.length;
+let cur = 0;
+// 0-indexed slides with light backgrounds → use earth-tone nav
+const light = new Set([2,3,4,5,6,7,8]);
+
+function go(i) {
+  slides[cur].classList.remove('active');
+  cur = Math.max(0, Math.min(N-1, i));
+  slides[cur].classList.add('active');
+  render();
+}
+
+function render() {
+  const e = light.has(cur);
+  const dots = document.getElementById('nav-dots');
+  dots.innerHTML = '';
+  for (let i=0;i<N;i++) {
+    const d = document.createElement('div');
+    d.className='dot'+(e?' e':'')+(i===cur?' on':'');
+    d.onclick=()=>go(i);
+    dots.appendChild(d);
+  }
+  document.getElementById('prev').className='arr'+(e?' e':'');
+  document.getElementById('next').className='arr'+(e?' e':'');
+  const c=document.getElementById('ctr');
+  c.className=e?'e':'';
+  c.textContent=(cur+1)+' / '+N;
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ') go(cur+1);
+  if(e.key==='ArrowLeft') go(cur-1);
+});
+let tx=0;
+document.addEventListener('touchstart',e=>tx=e.touches[0].clientX);
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>48)go(dx<0?cur+1:cur-1);
+});
+
+render();
+</script>
+</body>
+</html>
