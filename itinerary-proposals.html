@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mexico City — Thanksgiving 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+
+/* =============================================
+   VIEWPORT BASE — mandatory responsive CSS
+   ============================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  font-size: 16px;
+}
+
+.slide {
+  position: absolute; inset: 0;
+  width: 100vw;
+  height: 100vh; height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.slide.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* =============================================
+   GLOBAL TOKENS
+   ============================================= */
+:root {
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  /* Option A: Dawn Expedition — deep navy + gold */
+  --a-bg: #0b1020;
+  --a-bg2: #141929;
+  --a-gold: #f5c842;
+  --a-coral: #e8724a;
+  --a-sky: #7fb3d3;
+  --a-text: #f0ece0;
+  --a-muted: #8a95b0;
+
+  /* Option B: Verdant Morning — sage + terracotta */
+  --b-bg: #f5f0e8;
+  --b-sage: #3d6b57;
+  --b-terra: #c2603a;
+  --b-gold: #d4a843;
+  --b-cream: #fdf8ef;
+  --b-dark: #1c2b22;
+  --b-muted: #7a8c7e;
+
+  /* Option C: Editorial Warmth — warm cream + red + ink */
+  --c-bg: #f7f3ec;
+  --c-red: #c4293c;
+  --c-ink: #1a1410;
+  --c-warm: #e8d5b7;
+  --c-ochre: #b8862f;
+  --c-muted: #6b5a47;
+}
+
+/* =============================================
+   NAVIGATION
+   ============================================= */
+.nav-dots {
+  position: fixed;
+  bottom: clamp(16px, 3vh, 28px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 8px;
+  z-index: 100;
+}
+
+.dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  border: 1px solid rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.dot.active { background: white; transform: scale(1.3); }
+.dot.dark { background: rgba(0,0,0,0.2); border-color: rgba(0,0,0,0.35); }
+.dot.dark.active { background: var(--c-ink); }
+.dot.green { background: rgba(61,107,87,0.2); border-color: rgba(61,107,87,0.4); }
+.dot.green.active { background: var(--b-sage); }
+
+.nav-arrows {
+  position: fixed;
+  bottom: clamp(12px, 2vh, 20px);
+  right: clamp(16px, 3vw, 36px);
+  display: flex; gap: 8px;
+  z-index: 100;
+}
+
+.arrow-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  transition: all 0.2s;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  backdrop-filter: blur(4px);
+}
+.arrow-btn:hover { background: rgba(255,255,255,0.3); }
+.arrow-btn.dark { background: rgba(0,0,0,0.1); color: var(--c-ink); }
+.arrow-btn.dark:hover { background: rgba(0,0,0,0.2); }
+.arrow-btn.green { background: rgba(61,107,87,0.15); color: var(--b-sage); }
+.arrow-btn.green:hover { background: rgba(61,107,87,0.3); }
+
+.slide-counter {
+  position: fixed;
+  top: clamp(12px, 2vh, 20px);
+  right: clamp(16px, 3vw, 36px);
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 1.1vw, 11px);
+  letter-spacing: 0.1em;
+  z-index: 100;
+  color: rgba(255,255,255,0.4);
+}
+.slide-counter.dark { color: rgba(26,20,16,0.35); }
+.slide-counter.green { color: rgba(61,107,87,0.45); }
+
+/* =============================================
+   ANIMATIONS
+   ============================================= */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; } to { opacity: 1; }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-32px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+@keyframes sunRise {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes expandBar {
+  from { width: 0; }
+  to { width: 100%; }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+@keyframes drawLine {
+  from { stroke-dashoffset: 1000; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes leafSway {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+@keyframes scaleIn {
+  from { opacity:0; transform: scale(0.92); }
+  to { opacity:1; transform: scale(1); }
+}
+
+.slide.active .animate-1 { animation: fadeUp 0.7s ease both; }
+.slide.active .animate-2 { animation: fadeUp 0.7s 0.15s ease both; }
+.slide.active .animate-3 { animation: fadeUp 0.7s 0.3s ease both; }
+.slide.active .animate-4 { animation: fadeUp 0.7s 0.45s ease both; }
+.slide.active .animate-5 { animation: fadeUp 0.7s 0.6s ease both; }
+.slide.active .animate-6 { animation: fadeUp 0.7s 0.75s ease both; }
+.slide.active .animate-fade { animation: fadeIn 0.8s ease both; }
+.slide.active .animate-left { animation: slideInLeft 0.7s ease both; }
+.slide.active .animate-left-2 { animation: slideInLeft 0.7s 0.15s ease both; }
+.slide.active .animate-left-3 { animation: slideInLeft 0.7s 0.3s ease both; }
+.slide.active .animate-scale { animation: scaleIn 0.6s ease both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .slide.active [class*="animate"] { animation: none; opacity: 1; }
+}
+
+/* =============================================
+   SLIDE 1: COVER — Dark, cinematic, stars
+   ============================================= */
+#s1 {
+  background: var(--a-bg);
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.starfield {
+  position: absolute; inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: white;
+  animation: starTwinkle var(--dur, 3s) var(--delay, 0s) ease-in-out infinite;
+}
+
+.s1-content {
+  position: relative; z-index: 2;
+  text-align: center;
+  padding: clamp(20px, 4vw, 60px);
+}
+
+.s1-eyebrow {
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 1.2vw, 13px);
+  letter-spacing: 0.3em;
+  color: var(--a-gold);
+  text-transform: uppercase;
+  margin-bottom: clamp(12px, 2vh, 20px);
+}
+
+.s1-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 7vw, 88px);
+  font-weight: 900;
+  color: var(--a-text);
+  line-height: 1.0;
+  margin-bottom: clamp(8px, 1.5vh, 16px);
+}
+
+.s1-title em {
+  font-style: italic;
+  color: var(--a-gold);
+}
+
+.s1-subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.6vw, 18px);
+  color: var(--a-muted);
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  margin-bottom: clamp(24px, 4vh, 48px);
+}
+
+.s1-dates-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(12px, 2vw, 24px);
+  flex-wrap: wrap;
+}
+
+.s1-date-pill {
+  background: rgba(245, 200, 66, 0.12);
+  border: 1px solid rgba(245, 200, 66, 0.3);
+  border-radius: 100px;
+  padding: 6px 18px;
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 1.1vw, 12px);
+  color: var(--a-gold);
+  letter-spacing: 0.1em;
+}
+
+.s1-horizon {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 35%;
+  background: linear-gradient(to top, #1a1020 0%, rgba(26,16,32,0.6) 60%, transparent 100%);
+}
+
+.s1-glow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 200px;
+  background: radial-gradient(ellipse at bottom, rgba(232,114,74,0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* =============================================
+   SLIDE 2: VIDEO — embedded overview
+   ============================================= */
+#s2 {
+  background: #000;
+  justify-content: center;
+  align-items: center;
+}
+
+.video-frame {
+  position: relative;
+  width: min(90vw, 160vh * 0.5625);
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+}
+
+.video-frame iframe {
+  width: 100%; height: 100%;
+  border: none;
+}
+
+.video-label {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  padding: 20px 24px 16px;
+  font-family: var(--font-body);
+  color: rgba(255,255,255,0.8);
+  font-size: clamp(11px, 1.3vw, 14px);
+  letter-spacing: 0.05em;
+}
+
+.video-eyebrow {
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 1vw, 11px);
+  color: var(--a-gold);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin-bottom: clamp(10px, 1.5vh, 16px);
+  text-align: center;
+  color: rgba(255,255,255,0.5);
+}
+
+/* =============================================
+   SLIDE 3: THE PLAN — logistics overview
+   ============================================= */
+#s3 {
+  background: var(--a-bg2);
+  padding: clamp(32px, 5vh, 64px) clamp(24px, 6vw, 80px);
+  justify-content: center;
+}
+
+.s3-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(16px, 3vw, 40px);
+  margin-top: clamp(20px, 3vh, 40px);
+}
+
+.info-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: clamp(14px, 2vh, 24px) clamp(14px, 2vw, 22px);
+}
+
+.info-card-icon {
+  font-size: clamp(18px, 2.5vw, 28px);
+  margin-bottom: 8px;
+}
+
+.info-card-title {
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 1vw, 11px);
+  letter-spacing: 0.2em;
+  color: var(--a-gold);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.info-card-text {
+  font-family: var(--font-body);
+  font-size: clamp(12px, 1.4vw, 15px);
+  color: var(--a-text);
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+.info-card-text strong { font-weight: 600; color: var(--a-sky); }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 1vw, 11px);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--a-gold);
+  margin-bottom: clamp(8px, 1.5vh, 16px);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 4vw, 52px);
+  font-weight: 700;
+  color: var(--a-text);
+  line-height: 1.1;
+}
+
+.section-title em { font-style: italic; color: var(--a-gold); }
+
+/* =============================================
+   SLIDE 4: ACTIVITIES MENU — shared across all
+   ============================================= */
+#s4 {
+  background: var(--a-bg);
+  padding: clamp(28px, 4vh, 56px) clamp(24px, 6vw, 80px);
+  justify-content: center;
+}
+
+.activity-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(10px, 2vw, 20px);
+  margin-top: clamp(16px, 2.5vh, 32px);
+}
+
+.activity-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  padding: clamp(12px, 1.8vh, 20px) clamp(12px, 1.5vw, 18px);
+  position: relative;
+  overflow: hidden;
+}
+
+.activity-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--accent, var(--a-gold));
+}
+
+.activity-card .icon { font-size: clamp(18px, 2.5vw, 28px); margin-bottom: 6px; }
+.activity-card h3 {
+  font-family: var(--font-display);
+  font-size: clamp(13px, 1.6vw, 18px);
+  color: var(--a-text);
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+.activity-card p {
+  font-family: var(--font-body);
+  font-size: clamp(11px, 1.1vw, 13px);
+  color: var(--a-muted);
+  line-height: 1.4;
+}
+.activity-card .tag {
+  display: inline-block;
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: clamp(8px, 0.9vw, 10px);
+  color: var(--accent, var(--a-gold));
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* =============================================
+   SLIDES 5-7: ITINERARY OPTIONS (A, B, C)
+   Each has its own theme
+   ============================================= */
+
+/* --- OPTION A: DAWN EXPEDITION --- */
+#s5 {
+  background: var(--a-bg);
+  position: relative;
+  overflow: hidden;
+  padding: clamp(28px, 4vh, 52px) clamp(24px, 6vw, 72px);
+  justify-content: center;
+}
+
+.dawn-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 80% 50% at 50% 110%, rgba(232,114,74,0.2) 0%, rgba(245,200,66,0.08) 40%, transparent 70%);
+}
+
+.horizon-line {
+  position: absolute;
+  bottom: 20%;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(245,200,66,0.3), transparent);
+}
+
+.opt-header {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(16px, 3vw, 32px);
+  margin-bottom: clamp(16px, 2.5vh, 28px);
+  position: relative; z-index: 2;
+}
+
+.opt-badge {
+  width: clamp(48px, 7vw, 72px);
+  height: clamp(48px, 7vw, 72px);
+  border-radius: 50%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  border: 2px solid;
+}
+
+.opt-badge.dawn {
+  background: rgba(245,200,66,0.1);
+  border-color: var(--a-gold);
+  color: var(--a-gold);
+}
+
+.opt-badge .badge-letter { font-size: clamp(16px, 2.2vw, 24px); line-height: 1; }
+.opt-badge .badge-label { font-size: clamp(7px, 0.8vw, 9px); letter-spacing: 0.1em; }
+
+.opt-title-block { flex: 1; }
+.opt-name {
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 1vw, 11px);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--a-gold);
+  margin-bottom: 4px;
+}
+
+.opt-headline {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3.5vw, 44px);
+  font-weight: 900;
+  color: var(--a-text);
+  line-height: 1.05;
+}
+.opt-headline em { font-style: italic; color: var(--a-coral); }
+
+.opt-tagline {
+  font-family: var(--font-body);
+  font-size: clamp(11px, 1.2vw, 14px);
+  color: var(--a-muted);
+  margin-top: 4px;
+}
+
+/* Day timeline rows */
+.day-rows {
+  display: flex; flex-direction: column;
+  gap: clamp(8px, 1.2vh, 14px);
+  position: relative; z-index: 2;
+}
+
+.day-row {
+  display: grid;
+  grid-template-columns: clamp(60px, 8vw, 90px) 1fr;
+  gap: clamp(12px, 1.8vw, 20px);
+  align-items: start;
+}
+
+.day-label {
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 1.1vw, 12px);
+  font-weight: 700;
+  text-align: right;
+  padding-top: 3px;
+  letter-spacing: 0.05em;
+}
+
+.day-content {
+  border-left: 2px solid rgba(255,255,255,0.1);
+  padding-left: clamp(12px, 1.5vw, 18px);
+  position: relative;
+}
+
+.day-content::before {
+  content: '';
+  position: absolute;
+  left: -5px; top: 6px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--dot-color, var(--a-muted));
+}
+
+.day-activity {
+  font-family: var(--font-body);
+  font-size: clamp(12px, 1.3vw, 15px);
+  color: var(--a-text);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.day-note {
+  font-family: var(--font-body);
+  font-size: clamp(10px, 1.1vw, 12px);
+  color: var(--a-muted);
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+.day-chips {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  margin-top: 4px;
+}
+
+.chip {
+  font-family: var(--font-mono);
+  font-size: clamp(8px, 0.85vw, 10px);
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  border-radius: 100px;
+  border: 1px solid;
+}
+
+.chip.gold { color: var(--a-gold); border-color: rgba(245,200,66,0.4); background: rgba(245,200,66,0.07); }
+.chip.coral { color: var(--a-coral); border-color: rgba(232,114,74,0.4); background: rgba(232,114,74,0.07); }
+.chip.sky { color: var(--a-sky); border-color: rgba(127,179,211,0.4); background: rgba(127,179,211,0.07); }
+.chip.muted { color: var(--a-muted); border-color: rgba(138,149,176,0.3); background: rgba(138,149,176,0.05); }
+
+/* --- OPTION B: VERDANT MORNING --- */
+#s6 {
+  background: var(--b-bg);
+  position: relative; overflow: hidden;
+  padding: clamp(28px, 4vh, 52px) clamp(24px, 6vw, 72px);
+  justify-content: center;
+}
+
+.leaf-bg {
+  position: absolute; top: -20px; right: -40px;
+  width: clamp(160px, 30vw, 320px);
+  height: auto;
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+.leaf-bg-2 {
+  position: absolute; bottom: -30px; left: -20px;
+  width: clamp(100px, 18vw, 200px);
+  opacity: 0.06;
+}
+
+.b-section-label {
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 1vw, 11px);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--b-terra);
+}
+
+.b-opt-name { color: var(--b-sage); }
+
+.opt-badge.verdant {
+  background: rgba(61,107,87,0.1);
+  border-color: var(--b-sage);
+  color: var(--b-sage);
+}
+
+.b-opt-headline {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3.5vw, 44px);
+  font-weight: 900;
+  color: var(--b-dark);
+  line-height: 1.05;
+}
+.b-opt-headline em { font-style: italic; color: var(--b-terra); }
+
+.b-opt-tagline {
+  font-family: var(--font-body);
+  font-size: clamp(11px, 1.2vw, 14px);
+  color: var(--b-muted);
+  margin-top: 4px;
+}
+
+.b-day-rows { display: flex; flex-direction: column; gap: clamp(8px, 1.2vh, 14px); }
+
+.b-day-row {
+  display: grid;
+  grid-template-columns: clamp(60px, 8vw, 90px) 1fr;
+  gap: clamp(12px, 1.8vw, 20px);
+  align-items: start;
+}
+
+.b-day-label {
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 1.1vw, 12px);
+  font-weight: 700;
+  color: var(--b-sage);
+  text-align: right;
+  padding-top: 3px;
+}
+
+.b-day-content {
+  border-left: 2px solid rgba(61,107,87,0.2);
+  padding-left: clamp(12px, 1.5vw, 18px);
+  position: relative;
+}
+
+.b-day-content::before {
+  content: '';
+  position: absolute;
+  left: -5px; top: 6px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--b-dot, var(--b-muted));
+}
+
+.b-day-activity {
+  font-family: var(--font-body);
+  font-size: clamp(12px, 1.3vw, 15px);
+  color: var(--b-dark);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.b-day-note {
+  font-family: var(--font-body);
+  font-size: clamp(10px, 1.1vw, 12px);
+  color: var(--b-muted);
+  margin-top: 2px;
+}
+
+.b-day-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+
+.chip.sage { color: var(--b-sage); border-color: rgba(61,107,87,0.4); background: rgba(61,107,87,0.07); border: 1px solid; border-radius: 100px; font-family: var(--font-mono); font-size: clamp(8px, 0.85vw, 10px); letter-spacing: 0.08em; padding: 2px 8px; }
+.chip.terra { color: var(--b-terra); border-color: rgba(194,96,58,0.4); background: rgba(194,96,58,0.07); border: 1px solid; border-radius: 100px; font-family: var(--font-mono); font-size: clamp(8px, 0.85vw, 10px); letter-spacing: 0.08em; padding: 2px 8px; }
+.chip.bgold { color: var(--b-gold); border-color: rgba(212,168,67,0.4); background: rgba(212,168,67,0.07); border: 1px solid; border-radius: 100px; font-family: var(--font-mono); font-size: clamp(8px, 0.85vw, 10px); letter-spacing: 0.08em; padding: 2px 8px; }
+.chip.bmuted { color: var(--b-muted); border-color: rgba(122,140,126,0.3); background: rgba(122,140,126,0.05); border: 1px solid; border-radius: 100px; font-family: var(--font-mono); font-size: clamp(8px, 0.85vw, 10px); letter-spacing: 0.08em; padding: 2px 8px; }
+
+/* --- OPTION C: EDITORIAL WARMTH --- */
+#s7 {
+  background: var(--c-bg);
+  position: relative; overflow: hidden;
+  padding: clamp(28px, 4vh, 52px) clamp(24px, 6vw, 72px);
+  justify-content: center;
+}
+
+.c-accent-bar {
+  position: absolute;
+  top: 0; left: 0;
+  width: clamp(6px, 0.8vw, 10px);
+  height: 100%;
+  background: var(--c-red);
+}
+
+.c-section-label {
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 1vw, 11px);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--c-red);
+}
+
+.opt-badge.editorial {
+  background: rgba(196,41,60,0.08);
+  border-color: var(--c-red);
+  color: var(--c-red);
+}
+
+.c-opt-headline {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3.5vw, 44px);
+  font-weight: 900;
+  color: var(--c-ink);
+  line-height: 1.05;
+}
+.c-opt-headline em { font-style: italic; color: var(--c-red); }
+
+.c-opt-tagline {
+  font-family: var(--font-body);
+  font-size: clamp(11px, 1.2vw, 14px);
+  color: var(--c-muted);
+  margin-top: 4px;
+}
+
+.c-day-rows { display: flex; flex-direction: column; gap: clamp(8px, 1.2vh, 14px); }
+
+.c-day-row {
+  display: grid;
+  grid-template-columns: clamp(60px, 8vw, 90px) 1fr;
+  gap: clamp(12px, 1.8vw, 20px);
+  align-items: start;
+}
+
+.c-day-label {
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 1.1vw, 12px);
+  font-weight: 700;
+  color: var(--c-red);
+  text-align: right;
+  padding-top: 3px;
+}
+
+.c-day-content {
+  border-left: 2px solid rgba(196,41,60,0.15);
+  padding-left: clamp(12px, 1.5vw, 18px);
+  position: relative;
+}
+
+.c-day-content::before {
+  content: '';
+  position: absolute;
+  left: -5px; top: 6px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--c-dot, var(--c-muted));
+}
+
+.c-day-activity {
+  font-family: var(--font-body);
+  font-size: clamp(12px, 1.3vw, 15px);
+  color: var(--c-ink);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.c-day-note {
+  font-family: var(--font-body);
+  font-size: clamp(10px, 1.1vw, 12px);
+  color: var(--c-muted);
+  margin-top: 2px;
+}
+
+.c-day-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+
+.chip.cred { color: var(--c-red); border-color: rgba(196,41,60,0.4); background: rgba(196,41,60,0.05); border: 1px solid; border-radius: 100px; font-family: var(--font-mono); font-size: clamp(8px, 0.85vw, 10px); letter-spacing: 0.08em; padding: 2px 8px; }
+.chip.cochre { color: var(--c-ochre); border-color: rgba(184,134,47,0.4); background: rgba(184,134,47,0.06); border: 1px solid; border-radius: 100px; font-family: var(--font-mono); font-size: clamp(8px, 0.85vw, 10px); letter-spacing: 0.08em; padding: 2px 8px; }
+.chip.cmuted { color: var(--c-muted); border-color: rgba(107,90,71,0.3); background: rgba(107,90,71,0.04); border: 1px solid; border-radius: 100px; font-family: var(--font-mono); font-size: clamp(8px, 0.85vw, 10px); letter-spacing: 0.08em; padding: 2px 8px; }
+
+/* =============================================
+   SLIDE 8: NOTES & LOGISTICS
+   ============================================= */
+#s8 {
+  background: var(--a-bg);
+  padding: clamp(28px, 4vh, 52px) clamp(24px, 6vw, 72px);
+  justify-content: center;
+}
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(12px, 2vw, 24px);
+  margin-top: clamp(16px, 2.5vh, 28px);
+}
+
+.note-block {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  padding: clamp(12px, 1.8vh, 20px);
+}
+
+.note-block-title {
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 1vw, 11px);
+  letter-spacing: 0.2em;
+  color: var(--a-gold);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.note-items { display: flex; flex-direction: column; gap: 6px; }
+
+.note-item {
+  font-family: var(--font-body);
+  font-size: clamp(11px, 1.2vw, 14px);
+  color: var(--a-muted);
+  padding-left: 14px;
+  position: relative;
+  line-height: 1.4;
+}
+
+.note-item::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  color: var(--a-coral);
+  font-weight: 700;
+}
+
+.note-item strong { color: var(--a-text); font-weight: 500; }
+
+/* =============================================
+   SLIDE 9: CLOSING
+   ============================================= */
+#s9 {
+  background: var(--a-bg);
+  justify-content: center; align-items: center;
+  position: relative; overflow: hidden;
+}
+
+.closing-glow {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%; height: 60%;
+  background: radial-gradient(circle, rgba(245,200,66,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.closing-content {
+  position: relative; z-index: 2;
+  text-align: center;
+  padding: clamp(20px, 4vw, 60px);
+}
+
+.closing-eyebrow {
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 1vw, 11px);
+  letter-spacing: 0.35em;
+  color: var(--a-gold);
+  text-transform: uppercase;
+  margin-bottom: clamp(10px, 1.5vh, 18px);
+}
+
+.closing-title {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 5.5vw, 68px);
+  font-weight: 900;
+  color: var(--a-text);
+  line-height: 1.05;
+  margin-bottom: clamp(10px, 1.5vh, 18px);
+}
+
+.closing-title em { font-style: italic; color: var(--a-gold); }
+
+.closing-sub {
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.5vw, 17px);
+  color: var(--a-muted);
+  font-weight: 300;
+  max-width: 500px;
+  margin: 0 auto clamp(16px, 2.5vh, 28px);
+  line-height: 1.6;
+}
+
+.closing-vote {
+  display: inline-flex;
+  align-items: center; gap: 8px;
+  background: rgba(245,200,66,0.1);
+  border: 1px solid rgba(245,200,66,0.3);
+  border-radius: 100px;
+  padding: 10px 22px;
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 1.1vw, 12px);
+  color: var(--a-gold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* =============================================
+   SECTION HEADERS (between option groups)
+   ============================================= */
+.shared-section-label {
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 1vw, 11px);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: clamp(6px, 1vh, 10px);
+}
+
+.shared-section-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+/* ALWAYS LAST NIGHT badge on taco row */
+.always-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: clamp(8px, 0.8vw, 9px);
+  letter-spacing: 0.12em;
+  padding: 2px 8px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  margin-left: 6px;
+  vertical-align: middle;
+  background: rgba(245,200,66,0.15);
+  color: var(--a-gold);
+  border: 1px solid rgba(245,200,66,0.35);
+}
+
+.always-badge.dark {
+  background: rgba(212,168,67,0.1);
+  color: var(--b-gold);
+  border-color: rgba(212,168,67,0.3);
+}
+
+.always-badge.red {
+  background: rgba(196,41,60,0.08);
+  color: var(--c-red);
+  border-color: rgba(196,41,60,0.25);
+}
+
+/* Decorative SVG stars for slide 1 */
+.deco-circle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+</style>
+</head>
+<body>
+
+<!-- =============================================
+     SLIDE 1: COVER
+     ============================================= -->
+<div class="slide active" id="s1">
+  <!-- Starfield -->
+  <div class="starfield" id="starfield"></div>
+  <div class="s1-glow"></div>
+  <div class="s1-horizon"></div>
+
+  <div class="s1-content">
+    <div class="s1-eyebrow animate-1">✈ A family adventure proposal</div>
+    <h1 class="s1-title animate-2">
+      Mexico<br><em>City</em>
+    </h1>
+    <p class="s1-subtitle animate-3">Thanksgiving Week · Sat–Tue · Condesa Base Camp</p>
+    <div class="s1-dates-row animate-4">
+      <span class="s1-date-pill">Saturday Arrival</span>
+      <span class="s1-date-pill">4 Nights</span>
+      <span class="s1-date-pill">3 Itinerary Options</span>
+      <span class="s1-date-pill">Taco Tour Tuesday 🌮</span>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     SLIDE 2: VIDEO OVERVIEW
+     ============================================= -->
+<div class="slide" id="s2">
+  <div style="background:#0b1020; width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; padding: clamp(20px,4vh,48px) clamp(20px,4vw,60px);">
+    <p class="video-eyebrow animate-1" style="font-family:var(--font-mono);font-size:clamp(9px,1vw,11px);letter-spacing:0.3em;color:rgba(255,255,255,0.45);text-transform:uppercase;margin-bottom:clamp(12px,2vh,20px);">📍 First, a feel for the city</p>
+    <div class="video-frame animate-2" style="position:relative;width:min(90vw,min(85vh * 1.777, 960px));aspect-ratio:16/9;border-radius:12px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.7);">
+      <iframe
+        src="https://www.youtube.com/embed/gqLBEMbsGDA?rel=0&modestbranding=1"
+        title="Mexico City Overview"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        style="width:100%;height:100%;border:none;">
+      </iframe>
+    </div>
+    <p class="animate-3" style="font-family:var(--font-body);font-size:clamp(11px,1.2vw,13px);color:rgba(255,255,255,0.3);margin-top:clamp(10px,1.5vh,16px);font-style:italic;">Mexico City — a 3-minute intro</p>
+  </div>
+</div>
+
+<!-- =============================================
+     SLIDE 3: THE PLAN
+     ============================================= -->
+<div class="slide" id="s3">
+  <div class="section-label animate-1">The Setup</div>
+  <h2 class="section-title animate-2">Here's what we <em>know</em> for sure.</h2>
+
+  <div class="s3-grid">
+    <div class="info-card animate-3">
+      <div class="info-card-icon">🏡</div>
+      <div class="info-card-title">Home Base</div>
+      <div class="info-card-text"><strong>Condesa, CDMX</strong> — one of the most walkable, beautiful, and food-obsessed neighborhoods in the city. Art Deco architecture, Parque México steps away, cocktail bars on every block.</div>
+    </div>
+    <div class="info-card animate-3" style="animation-delay:0.1s">
+      <div class="info-card-icon">📅</div>
+      <div class="info-card-title">Our Days</div>
+      <div class="info-card-text"><strong>Saturday</strong> — rolling arrivals, low-key night out<br><strong>Sunday + Monday</strong> — two adventure days<br><strong>Tuesday</strong> — museums open! + <strong>Taco Tour</strong> to close it all out</div>
+    </div>
+    <div class="info-card animate-4">
+      <div class="info-card-icon">🌮</div>
+      <div class="info-card-title">Tuesday Night: Non-Negotiable</div>
+      <div class="info-card-text">We end every option the same way — a <strong>self-guided taco tour</strong> through the streets. No reservations. No plans. Just tacos.</div>
+    </div>
+    <div class="info-card animate-4" style="animation-delay:0.1s">
+      <div class="info-card-icon">⚠️</div>
+      <div class="info-card-title">One Museum Note</div>
+      <div class="info-card-text"><strong>Both the Anthropology Museum and Chapultepec Castle are closed Mondays.</strong> All our itineraries work around this — museum days always land on Sunday or Tuesday.</div>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     SLIDE 4: ACTIVITY MENU
+     ============================================= -->
+<div class="slide" id="s4">
+  <div class="section-label animate-1">The Menu</div>
+  <h2 class="section-title animate-2">Activities we're <em>choosing from</em></h2>
+
+  <div class="activity-grid">
+    <div class="activity-card animate-3" style="--accent:var(--a-coral)">
+      <div class="icon">🎈</div>
+      <h3>Hot Air Balloon + Pyramids</h3>
+      <p>Sunrise over Teotihuacán — one of the most jaw-dropping things you can do in all of Mexico. Breakfast buffet + optional pyramid walk included.</p>
+      <div class="tag">5am pickup · Half day · ~$150–200/pp</div>
+    </div>
+    <div class="activity-card animate-3" style="--accent:var(--b-sage); animation-delay:0.1s">
+      <div class="icon">🏛️</div>
+      <h3>Anthropology Museum</h3>
+      <p>The finest pre-Columbian collection in the world. The Aztec Sun Stone. The Maya room. World-class and walkable from Condesa via Chapultepec Park.</p>
+      <div class="tag">Tue–Sun only · 3–4 hrs · ~$5/pp</div>
+    </div>
+    <div class="activity-card animate-3" style="--accent:var(--a-gold); animation-delay:0.2s">
+      <div class="icon">🏰</div>
+      <h3>Chapultepec Castle</h3>
+      <p>The only royal castle in North America, perched on a hill with panoramic city views. Houses the National Museum of History — a steep but rewarding climb.</p>
+      <div class="tag">Tue–Sun only · 2–3 hrs · ~$5/pp</div>
+    </div>
+    <div class="activity-card animate-4" style="--accent:var(--a-sky)">
+      <div class="icon">🚌</div>
+      <h3>Turibus Hop-On Hop-Off</h3>
+      <p>Four routes covering all of the city's major neighborhoods. Audio guides in 9 languages, stops near all major sights. Perfect intro to CDMX.</p>
+      <div class="tag">Daily 9am–7pm · Full day · ~$20/pp</div>
+    </div>
+    <div class="activity-card animate-4" style="--accent:var(--b-terra); animation-delay:0.1s">
+      <div class="icon">🛶</div>
+      <h3>Xochimilco Canal Tour</h3>
+      <p>Colorful trajinera boats drifting through ancient Aztec canals — with floating vendors, mariachis, and snacks rowing up alongside you. Pure joy.</p>
+      <div class="tag">Daily 8am–5pm · Half–full day</div>
+    </div>
+    <div class="activity-card animate-4" style="--accent:var(--c-red); animation-delay:0.2s">
+      <div class="icon">🍽️</div>
+      <h3>High-End Group Dinner</h3>
+      <p>One special evening at a restaurant with a private dining room for our group. Think top-tier Mexican cuisine — contemporary or traditional. Worth the splurge.</p>
+      <div class="tag">Sun or Mon evening · ~$150–200/pp</div>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     SLIDE 5: OPTION A — DAWN EXPEDITION
+     ============================================= -->
+<div class="slide" id="s5">
+  <div class="dawn-bg"></div>
+  <div class="horizon-line"></div>
+
+  <div class="opt-header">
+    <div class="opt-badge dawn animate-1">
+      <span class="badge-letter">A</span>
+      <span class="badge-label">OPT</span>
+    </div>
+    <div class="opt-title-block">
+      <div class="opt-name animate-1">Option A · Dawn Expedition</div>
+      <h2 class="opt-headline animate-2"><em>Rise early,</em> earn the view.</h2>
+      <p class="opt-tagline animate-2">Lead with the biggest adventure while energy is high — hit the balloon on Day 2, then coast beautifully through the rest of the trip.</p>
+    </div>
+  </div>
+
+  <div class="day-rows">
+    <div class="day-row animate-3">
+      <div class="day-label" style="color:var(--a-muted)">SAT</div>
+      <div class="day-content" style="--dot-color:var(--a-muted)">
+        <div class="day-activity">Arrivals + Condesa cocktail crawl 🍹</div>
+        <div class="day-note">No reservations needed — just walk out the door. Baltra Bar, rooftop at Condesa DF, Licorería Limantour nearby in Roma Norte.</div>
+        <div class="day-chips"><span class="chip muted">No Reservations</span><span class="chip muted">Walkable</span></div>
+      </div>
+    </div>
+    <div class="day-row animate-4">
+      <div class="day-label" style="color:var(--a-coral)">SUN</div>
+      <div class="day-content" style="--dot-color:var(--a-coral)">
+        <div class="day-activity">🎈 Hot Air Balloon + Teotihuacán Pyramids</div>
+        <div class="day-note">5am pickup from Condesa. Sunrise flight, champagne toast, buffet breakfast, 2 hrs at the pyramids. Back by 1–2pm for a recovery afternoon.</div>
+        <div class="day-chips"><span class="chip coral">5am Pickup</span><span class="chip coral">~$150–200/pp</span><span class="chip muted">Half Day</span></div>
+      </div>
+    </div>
+    <div class="day-row animate-4" style="animation-delay:0.1s">
+      <div class="day-label" style="color:var(--a-sky)">MON</div>
+      <div class="day-content" style="--dot-color:var(--a-sky)">
+        <div class="day-activity">🚌 Turibus all day + 🍽️ High-End Dinner</div>
+        <div class="day-note">Flexible city orientation — hop off at Centro Histórico, Polanco, wherever calls. Evening: the big group dinner with a private room.</div>
+        <div class="day-chips"><span class="chip sky">Flexible Pace</span><span class="chip sky">Reservation Required</span></div>
+      </div>
+    </div>
+    <div class="day-row animate-5">
+      <div class="day-label" style="color:var(--a-gold)">TUE</div>
+      <div class="day-content" style="--dot-color:var(--a-gold)">
+        <div class="day-activity">🏛️ Anthropology Museum + Chapultepec Castle → 🌮 Taco Tour<span class="always-badge">Always</span></div>
+        <div class="day-note">Both open Tuesday! Morning at the museum (3–4 hrs), afternoon at the castle for views, then self-guided tacos all evening.</div>
+        <div class="day-chips"><span class="chip gold">Museums Open</span><span class="chip gold">Self-Guided Tacos</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     SLIDE 6: OPTION B — VERDANT MORNING
+     ============================================= -->
+<div class="slide" id="s6">
+  <!-- Decorative leaf SVGs -->
+  <svg class="leaf-bg" viewBox="0 0 200 300" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;top:-20px;right:-30px;width:clamp(120px,22vw,280px);opacity:0.1;pointer-events:none;animation:leafSway 6s ease-in-out infinite;">
+    <path d="M100 10 C160 40, 180 120, 100 290 C20 120, 40 40, 100 10Z" fill="#3d6b57"/>
+    <line x1="100" y1="10" x2="100" y2="290" stroke="#3d6b57" stroke-width="3"/>
+    <line x1="100" y1="80" x2="155" y2="120" stroke="#3d6b57" stroke-width="1.5"/>
+    <line x1="100" y1="140" x2="160" y2="170" stroke="#3d6b57" stroke-width="1.5"/>
+    <line x1="100" y1="80" x2="45" y2="120" stroke="#3d6b57" stroke-width="1.5"/>
+    <line x1="100" y1="140" x2="40" y2="170" stroke="#3d6b57" stroke-width="1.5"/>
+  </svg>
+
+  <div class="opt-header">
+    <div class="opt-badge verdant animate-1">
+      <span class="badge-letter">B</span>
+      <span class="badge-label">OPT</span>
+    </div>
+    <div class="opt-title-block">
+      <div class="opt-name b-opt-name animate-1">Option B · Verdant Morning</div>
+      <h2 class="b-opt-headline animate-2"><em>Settle in,</em> then soar.</h2>
+      <p class="b-opt-tagline animate-2">Start with culture and city-getting — then build up to Xochimilco's canals and a wild balloon morning to close it out.</p>
+    </div>
+  </div>
+
+  <div class="b-day-rows">
+    <div class="b-day-row animate-3">
+      <div class="b-day-label">SAT</div>
+      <div class="b-day-content" style="--b-dot:var(--b-muted)">
+        <div class="b-day-activity">Arrivals + Condesa cocktail crawl 🍹</div>
+        <div class="b-day-note">No reservations. Walk out the door, find a terrace, get oriented. The neighborhood does the work.</div>
+        <div class="b-day-chips"><span class="chip bmuted">No Reservations</span><span class="chip bmuted">Walkable</span></div>
+      </div>
+    </div>
+    <div class="b-day-row animate-4">
+      <div class="b-day-label" style="color:var(--b-sage)">SUN</div>
+      <div class="b-day-content" style="--b-dot:var(--b-sage)">
+        <div class="b-day-activity">🚌 Turibus + 🏛️ Anthropology Museum + Chapultepec Castle + 🍽️ Dinner</div>
+        <div class="b-day-note">Turibus orients you, hop off at Chapultepec for both museums (both open Sunday!). Evening: big group dinner with private dining room.</div>
+        <div class="b-day-chips"><span class="chip sage">Museums Open Sun</span><span class="chip bgold">Dinner</span></div>
+      </div>
+    </div>
+    <div class="b-day-row animate-4" style="animation-delay:0.1s">
+      <div class="b-day-label" style="color:var(--b-terra)">MON</div>
+      <div class="b-day-content" style="--b-dot:var(--b-terra)">
+        <div class="b-day-activity">🛶 Xochimilco Canal Day + Coyoacán wander</div>
+        <div class="b-day-note">Full day in the south — colorful trajinera boats, floating mariachis, snacks, mezcal. Walk through Coyoacán's cobblestones after. One of a kind.</div>
+        <div class="b-day-chips"><span class="chip terra">Half–Full Day</span><span class="chip terra">Festive</span><span class="chip bmuted">No Museums Mon</span></div>
+      </div>
+    </div>
+    <div class="b-day-row animate-5">
+      <div class="b-day-label" style="color:var(--b-gold)">TUE</div>
+      <div class="b-day-content" style="--b-dot:var(--b-gold)">
+        <div class="b-day-activity">🎈 Hot Air Balloon + Teotihuacán → 🌮 Taco Tour<span class="always-badge dark">Always</span></div>
+        <div class="b-day-note">5am balloon, back by 1–2pm, rest up — then taco tour as a triumphant finale. Yes, it's a long day. Worth it.</div>
+        <div class="b-day-chips"><span class="chip bgold">5am Pickup</span><span class="chip bgold">~$150–200/pp</span><span class="chip bmuted">Epic Finale</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     SLIDE 7: OPTION C — EDITORIAL WARMTH
+     ============================================= -->
+<div class="slide" id="s7">
+  <div class="c-accent-bar"></div>
+
+  <div class="opt-header" style="padding-left:clamp(8px,1.5vw,20px);">
+    <div class="opt-badge editorial animate-1">
+      <span class="badge-letter">C</span>
+      <span class="badge-label">OPT</span>
+    </div>
+    <div class="opt-title-block">
+      <div class="opt-name c-section-label animate-1">Option C · Split the Big Days</div>
+      <h2 class="c-opt-headline animate-2"><em>Breathe between</em> the adventures.</h2>
+      <p class="c-opt-tagline animate-2">Separate the two big excursions for max recovery. A more relaxed rhythm — still packed, just paced.</p>
+    </div>
+  </div>
+
+  <div class="c-day-rows" style="padding-left:clamp(8px,1.5vw,20px);">
+    <div class="c-day-row animate-3">
+      <div class="c-day-label" style="color:var(--c-muted)">SAT</div>
+      <div class="c-day-content" style="--c-dot:var(--c-muted)">
+        <div class="c-day-activity">Arrivals + Condesa cocktail crawl 🍹</div>
+        <div class="c-day-note">No reservations. Wander the Art Deco streets, park-hop, find your favorites before everyone even arrives.</div>
+        <div class="c-day-chips"><span class="chip cmuted">No Reservations</span><span class="chip cmuted">Walkable</span></div>
+      </div>
+    </div>
+    <div class="c-day-row animate-4">
+      <div class="c-day-label" style="color:var(--c-red)">SUN</div>
+      <div class="c-day-content" style="--c-dot:var(--c-red)">
+        <div class="c-day-activity">🎈 Hot Air Balloon + Teotihuacán Pyramids</div>
+        <div class="c-day-note">5am pickup. Sunrise flight, champagne, breakfast buffet, pyramids. Back by early afternoon — plenty of time to decompress before dinner if desired.</div>
+        <div class="c-day-chips"><span class="chip cred">5am Pickup</span><span class="chip cred">~$150–200/pp</span><span class="chip cmuted">Recovery Afternoon</span></div>
+      </div>
+    </div>
+    <div class="c-day-row animate-4" style="animation-delay:0.1s">
+      <div class="c-day-label" style="color:var(--c-ochre)">MON</div>
+      <div class="c-day-content" style="--c-dot:var(--c-ochre)">
+        <div class="c-day-activity">🛶 Xochimilco + Coyoacán + 🍽️ High-End Dinner</div>
+        <div class="c-day-note">Full southern neighborhood day — canals, boats, floating vendors. Wind down through Coyoacán's plazas, then the big dinner to cap it.</div>
+        <div class="c-day-chips"><span class="chip cochre">Full Day</span><span class="chip cochre">Dinner</span><span class="chip cmuted">No Museums Mon</span></div>
+      </div>
+    </div>
+    <div class="c-day-row animate-5">
+      <div class="c-day-label" style="color:var(--c-red)">TUE</div>
+      <div class="c-day-content" style="--c-dot:var(--c-red)">
+        <div class="c-day-activity">🏛️ Anthropology Museum + Chapultepec Castle → 🌮 Taco Tour<span class="always-badge red">Always</span></div>
+        <div class="c-day-note">Museum morning, castle afternoon, and street tacos as the grand sendoff. The most leisurely Tuesday of the three options.</div>
+        <div class="c-day-chips"><span class="chip cred">Museums Open</span><span class="chip cred">Self-Guided Tacos</span><span class="chip cmuted">Best Pacing</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     SLIDE 8: NOTES & GOOD-TO-KNOWS
+     ============================================= -->
+<div class="slide" id="s8">
+  <div class="section-label animate-1">Good to Know</div>
+  <h2 class="section-title animate-2">A few <em>things</em> before you vote.</h2>
+
+  <div class="notes-grid">
+    <div class="note-block animate-3">
+      <div class="note-block-title">🎈 Hot Air Balloon</div>
+      <div class="note-items">
+        <div class="note-item"><strong>5am pickup</strong> from near the Airbnb — plan accordingly the night before</div>
+        <div class="note-item">Top-rated company: <strong>Volare</strong> (FAA + AFAC certified, thousands of 5-star reviews)</div>
+        <div class="note-item">Includes <strong>champagne toast, buffet breakfast</strong> + optional 2hr pyramid time</div>
+        <div class="note-item">Eats most of the morning — <strong>plan a slow afternoon</strong> after</div>
+      </div>
+    </div>
+    <div class="note-block animate-3" style="animation-delay:0.1s">
+      <div class="note-block-title">🏛️ Museums</div>
+      <div class="note-items">
+        <div class="note-item"><strong>Both museums closed Mondays</strong> — this is locked in and planned around</div>
+        <div class="note-item">Anthropology Museum: open <strong>Tue–Sun, 9am–5pm</strong> — budget 3–4 hrs minimum</div>
+        <div class="note-item">Chapultepec Castle: open <strong>Tue–Sun, 9am–5pm</strong> — steep uphill walk, totally worth it</div>
+        <div class="note-item">Both are in <strong>Chapultepec Park</strong> — can do both in one day comfortably</div>
+      </div>
+    </div>
+    <div class="note-block animate-4">
+      <div class="note-block-title">🛶 Xochimilco</div>
+      <div class="note-items">
+        <div class="note-item">A <strong>UNESCO World Heritage</strong> canal system — ancient Aztec chinampas</div>
+        <div class="note-item">Trajinera boats priced <strong>per boat, not per person</strong> — good for groups!</div>
+        <div class="note-item">Bring <strong>cash</strong> for floating vendors, mariachis, and canal-side snacks</div>
+        <div class="note-item">Plan <strong>half to full day</strong> — pairs beautifully with Coyoacán neighborhood after</div>
+      </div>
+    </div>
+    <div class="note-block animate-4" style="animation-delay:0.1s">
+      <div class="note-block-title">🍽️ Dinner & 🌮 Taco Tour</div>
+      <div class="note-items">
+        <div class="note-item">High-end dinner: <strong>private dining room likely needed</strong> for our group size — restaurant TBD pending headcount</div>
+        <div class="note-item">Budget range: <strong>~$150–200/pp</strong> (could be a bit less depending on choice)</div>
+        <div class="note-item">Tuesday Taco Tour is <strong>completely self-guided</strong> — no booking, no bus, just us and CDMX</div>
+        <div class="note-item">Condesa / Roma Norte are <strong>super safe neighborhoods</strong> for walking at night</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================
+     SLIDE 9: CLOSING / VOTE PROMPT
+     ============================================= -->
+<div class="slide" id="s9">
+  <!-- Stars again -->
+  <div class="starfield" id="starfield2"></div>
+  <div class="closing-glow"></div>
+
+  <div class="closing-content">
+    <div class="closing-eyebrow animate-1">So... which one?</div>
+    <h2 class="closing-title animate-2">
+      Let's <em>vote</em> and<br>book this thing.
+    </h2>
+    <p class="closing-sub animate-3">
+      All three options include the same non-negotiables — arrival cocktails, one big splurge dinner, and the legendary Tuesday taco tour. The question is just how you want to get there.
+    </p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;" class="animate-4">
+      <div class="closing-vote">A · Dawn Expedition 🌄</div>
+      <div class="closing-vote">B · Verdant Morning 🌿</div>
+      <div class="closing-vote">C · Split the Days 🗞️</div>
+    </div>
+    <p class="animate-5" style="font-family:var(--font-mono);font-size:clamp(9px,1vw,11px);color:var(--a-muted);margin-top:clamp(14px,2vh,22px);letter-spacing:0.1em;">Feliz Thanksgiving, family. ✨</p>
+  </div>
+</div>
+
+<!-- =============================================
+     NAVIGATION UI
+     ============================================= -->
+<div class="nav-dots" id="navDots"></div>
+<div class="nav-arrows" id="navArrows">
+  <button class="arrow-btn" id="prevBtn" onclick="navigate(-1)">←</button>
+  <button class="arrow-btn" id="nextBtn" onclick="navigate(1)">→</button>
+</div>
+<div class="slide-counter" id="slideCounter">1 / 9</div>
+
+<script>
+/* =============================================
+   NAVIGATION SYSTEM
+   ============================================= */
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+let currentSlide = 0;
+
+// Dark-slide dot/arrow/counter class per slide index
+// 0=dark, 1=dark, 2=dark, 3=dark, 4=dark, 5=dark, 6=green, 7=dark(c-bg light), 8=dark, 9=dark
+const slideThemes = ['', '', '', '', '', '', 'green', 'dark', '', ''];
+
+function getTheme(idx) { return slideThemes[idx] || ''; }
+
+function updateNav() {
+  const theme = getTheme(currentSlide);
+
+  // Dots
+  const dotsEl = document.getElementById('navDots');
+  dotsEl.innerHTML = '';
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (theme ? ' ' + theme : '') + (i === currentSlide ? ' active' : '');
+    dot.onclick = () => goTo(i);
+    dotsEl.appendChild(dot);
+  }
+
+  // Arrows
+  const prev = document.getElementById('prevBtn');
+  const next = document.getElementById('nextBtn');
+  prev.className = 'arrow-btn' + (theme ? ' ' + theme : '');
+  next.className = 'arrow-btn' + (theme ? ' ' + theme : '');
+
+  // Counter
+  const counter = document.getElementById('slideCounter');
+  counter.className = 'slide-counter' + (theme ? ' ' + theme : '');
+  counter.textContent = (currentSlide + 1) + ' / ' + totalSlides;
+}
+
+function goTo(idx) {
+  slides[currentSlide].classList.remove('active');
+  currentSlide = Math.max(0, Math.min(totalSlides - 1, idx));
+  slides[currentSlide].classList.add('active');
+  updateNav();
+}
+
+function navigate(dir) { goTo(currentSlide + dir); }
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') navigate(1);
+  if (e.key === 'ArrowLeft') navigate(-1);
+});
+
+// Touch/swipe
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
+});
+
+// Init
+updateNav();
+
+/* =============================================
+   STARFIELD GENERATOR
+   ============================================= */
+function makeStars(containerId, count) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  for (let i = 0; i < count; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    const size = Math.random() * 2.5 + 0.5;
+    star.style.cssText = `
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 100}%;
+      width: ${size}px;
+      height: ${size}px;
+      --dur: ${2 + Math.random() * 4}s;
+      --delay: ${Math.random() * 5}s;
+      opacity: ${0.2 + Math.random() * 0.6};
+    `;
+    el.appendChild(star);
+  }
+}
+
+makeStars('starfield', 120);
+makeStars('starfield2', 80);
+</script>
+
+</body>
+</html>
